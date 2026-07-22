@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>twenty two letters for twenty two year old suhani</title>
+
+<!-- Fonts: Fraunces (modern classy serif) + Nunito (cute rounded body) + Caveat (handwritten accents) -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Nunito:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+
+<style>
+  /* ============================================================
+     🎨  YOU PROBABLY DON'T NEED TO TOUCH THIS PART.
+     To add the real letters, scroll ALL the way down to the
+     part that says  "✏️  EDIT THE 22 LETTERS HERE".
+     ============================================================ */
+
+  :root {
+    --leather:      #6f4e37;
+    --leather-dark: #543a29;
+    --leather-lite: #8a6a4f;
+    --caramel:      #a9744f;
+    --paper:        #f7efe1;
+    --paper-edge:   #ecdfca;
+    --ink:          #4b3826;
+    --ink-soft:     #8a745e;
+    --ribbon:       #c98b76;
+    --gold:         #c9a86a;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body { height: 100%; margin: 0; }
+
+  body {
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(18px, 4vh, 34px);
+    padding: 28px 16px;
+    font-family: 'Nunito', system-ui, -apple-system, sans-serif;
+    color: var(--ink);
+    background:
+      radial-gradient(120% 120% at 50% 0%, #e9dcc6 0%, #d8c3a5 45%, #c7ad8b 100%);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ---------- the stage that holds the book (gives 3D depth) ---------- */
+  .scene {
+    perspective: 2200px;
+    width: min(92vw, 420px);
+    aspect-ratio: 5 / 6.6;
+    max-height: 78vh;
+  }
+
+  .book {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transform-style: preserve-3d;
+    /* faux page-stack thickness on the right + soft drop shadow */
+    filter: drop-shadow(0 26px 34px rgba(58, 39, 24, 0.38));
+  }
+
+  /* the little stacked pages peeking on the right edge */
+  .book::after {
+    content: "";
+    position: absolute;
+    top: 6px; bottom: 6px; right: -7px;
+    width: 12px;
+    border-radius: 0 6px 6px 0;
+    background:
+      repeating-linear-gradient(to right,
+        var(--paper) 0 2px, var(--paper-edge) 2px 4px);
+    box-shadow: inset -2px 0 4px rgba(84,58,41,.25);
+    z-index: 0;
+  }
+
+  /* ---------- the cream pages ---------- */
+  .page {
+    position: absolute;
+    inset: 0;
+    border-radius: 4px 8px 8px 4px;
+    background:
+      radial-gradient(130% 110% at 0% 50%, rgba(120,88,58,.10), transparent 42%),
+      linear-gradient(180deg, #fbf5ea, var(--paper) 60%, #f2e7d3);
+    background-color: var(--paper);
+    box-shadow: inset 14px 0 26px -14px rgba(84,58,41,.45); /* spine shadow */
+    overflow: hidden;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+  }
+  /* faint paper grain */
+  .page::before {
+    content: "";
+    position: absolute; inset: 0;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/></filter><rect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/></svg>");
+    opacity: .05;
+    mix-blend-mode: multiply;
+    pointer-events: none;
+  }
+
+  .page-inner {
+    position: absolute;
+    inset: 0;
+    padding: clamp(30px, 8%, 54px) clamp(26px, 9%, 46px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    overflow-y: auto;
+    scrollbar-width: none;
+  }
+  .page-inner::-webkit-scrollbar { display: none; }
+
+  .page-no {
+    font-family: 'Caveat', cursive;
+    font-size: 1.35rem;
+    color: var(--ink-soft);
+    letter-spacing: .5px;
+    flex: 0 0 auto;
+    margin-bottom: clamp(12px, 3%, 20px);
+  }
+
+  /* placeholder for pages whose photo isn't in the folder yet */
+  .coming-soon {
+    margin: auto 0;               /* vertically center in the page */
+    font-family: 'Nunito', sans-serif;   /* same font as "22 letters for your 22nd" */
+    font-weight: 600;
+    letter-spacing: 1px;
+    font-size: clamp(1rem, 4vw, 1.25rem);
+    line-height: 1.5;
+    color: var(--ink-soft);
+  }
+  .coming-soon .sub-heart { color: var(--ribbon); }
+
+  /* ---------- a photo of a note, one per page ---------- */
+  .photo-slot {
+    position: relative;
+    flex: 1 1 auto;
+    min-height: 0;            /* lets the image shrink to fit the page */
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .page-photo {
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    object-fit: contain;      /* keeps every image's own proportions */
+    border-radius: 12px;      /* echoes the rounded page corners */
+    box-shadow:
+      0 10px 24px rgba(84,58,41,.28),
+      0 2px 6px rgba(84,58,41,.20);
+    background: #fff;
+    cursor: zoom-in;          /* the whole photo opens the larger view */
+  }
+  /* ---------- the enlarged photo pop-up (lightbox) ---------- */
+  .lightbox {
+    position: fixed; inset: 0; z-index: 60;
+    display: flex; align-items: center; justify-content: center;
+    padding: 5vmin;
+    background: rgba(40,26,16,.72);
+    -webkit-backdrop-filter: blur(4px);
+    backdrop-filter: blur(4px);
+    opacity: 0; pointer-events: none;
+    transition: opacity .3s ease;
+  }
+  .lightbox.show { opacity: 1; pointer-events: auto; }
+  .lightbox-img {
+    max-width: 94vw; max-height: 90vh;
+    object-fit: contain;
+    border-radius: 16px;          /* keep the rounded edges when enlarged */
+    box-shadow: 0 30px 70px rgba(0,0,0,.55);
+    background: #fff;
+    transform: scale(.96);
+    transition: transform .3s ease;
+  }
+  .lightbox.show .lightbox-img { transform: scale(1); }
+  .lightbox-close {
+    position: absolute;
+    top: max(16px, 3vh); right: max(16px, 3vw);
+    width: 46px; height: 46px;
+    display: grid; place-items: center;
+    border: none; border-radius: 999px;
+    background: rgba(255,250,240,.92);
+    color: var(--ink); font-size: 1.15rem;
+    cursor: pointer;
+    box-shadow: 0 6px 16px rgba(0,0,0,.35);
+    transition: transform .15s ease, background .2s ease;
+  }
+  .lightbox-close:hover { transform: translateY(-1px); background: #fff; }
+  .lightbox-close:focus-visible { outline: 3px solid var(--ribbon); outline-offset: 3px; }
+  .page-eyebrow {
+    font-family: 'Caveat', cursive;
+    font-size: 1.25rem;
+    color: var(--ribbon);
+    margin: 4px 0 14px;
+  }
+  .msg {
+    font-family: 'Nunito', sans-serif;
+    font-size: clamp(0.62rem, 2.3vw, 0.85rem);
+    line-height: 1.55;
+    color: var(--ink-soft);     /* same warm tone as the "no." at the top */
+    white-space: pre-wrap;      /* keeps line breaks you type in */
+    margin: auto 0;             /* vertically center within the page */
+  }
+  .msg-from {
+    font-family: 'Caveat', cursive;
+    font-size: 1.55rem;
+    color: var(--caramel);
+    margin-top: 18px;
+  }
+  .page-heart {
+    margin-top: auto;
+    color: var(--ribbon);
+    font-size: 1.1rem;
+    opacity: .8;
+  }
+
+  /* the flipping page sits on top of everything */
+  #pageFront { z-index: 3; transform-origin: left center; will-change: transform; }
+  #pageBack  { z-index: 2; }
+
+  /* soft shadow that sweeps across the turning page */
+  #pageFront .shade {
+    position: absolute; inset: 0;
+    background: linear-gradient(90deg, rgba(60,40,24,.28), rgba(60,40,24,0) 55%);
+    opacity: 0;
+    transition: opacity var(--flip) ease;
+    pointer-events: none;
+  }
+  .book.flipping #pageFront .shade { opacity: 1; }
+
+  /* ---------- the leather cover ---------- */
+  .cover {
+    position: absolute;
+    inset: 0;
+    z-index: 6;
+    border-radius: 4px 10px 10px 4px;
+    transform-origin: left center;
+    transform: rotateY(0deg);
+    transition: transform 1.15s cubic-bezier(.62,.02,.2,1);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    cursor: pointer;
+    -webkit-user-select: none;   /* text isn't selectable, so no I-beam over the cover */
+    user-select: none;
+    background:
+      linear-gradient(150deg, var(--leather-lite), var(--leather) 42%, var(--leather-dark));
+    box-shadow:
+      inset 0 0 0 2px rgba(0,0,0,.10),
+      inset 0 0 42px rgba(0,0,0,.28);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .cover::before {  /* leather grain */
+    content:"";
+    position:absolute; inset:0; border-radius:inherit;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='140' height='140'><filter id='l'><feTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='2'/></filter><rect width='100%25' height='100%25' filter='url(%23l)' opacity='0.6'/></svg>");
+    opacity:.12; mix-blend-mode:overlay;
+  }
+  .cover.open { transform: rotateY(-162deg); }
+
+  /* dark spine strip + stitching on the cover's left */
+  .cover .spine {
+    position: absolute; left: 0; top: 0; bottom: 0; width: 20px;
+    background: linear-gradient(90deg, rgba(0,0,0,.30), rgba(0,0,0,0));
+    border-right: 1px dashed rgba(255,255,255,.16);
+  }
+
+  .cover-plate {
+    position: relative;
+    text-align: center;
+    padding: 26px 30px;
+    color: #f3e7cf;
+  }
+  .cover-eyebrow {
+    position: absolute;
+    left: 0; right: 0; bottom: 22px;
+    padding: 0 18px;
+    text-align: center;
+    font-family: 'Nunito', sans-serif; font-weight: 600;
+    letter-spacing: 1px; text-transform: lowercase;
+    font-size: .75rem; color: var(--ribbon);
+  }
+  .cover-name {
+    font-family: 'Fraunces', serif; font-weight: 500;
+    font-size: clamp(3.2rem, 14vw, 4.4rem);
+    line-height: .9; color: #fbf3e2;
+    letter-spacing: .5px;
+    text-shadow: 0 2px 1px rgba(0,0,0,.35);
+  }
+  .cover-sub {
+    font-family: 'Caveat', cursive; font-weight: 600;
+    font-size: 1.5rem; letter-spacing: .5px;
+    color: #e7d4b3; margin-top: 10px;
+  }
+  .sub-heart { color: var(--ribbon); }
+  .cover-name .sub-heart { font-size: 1.7rem; vertical-align: middle; }
+  /* the "tap to open" hint — fixed at the bottom center, below the centered notebook */
+  .open-hint {
+    position: fixed;
+    left: 0; right: 0; bottom: clamp(20px, 5vh, 46px);
+    font-family: 'Caveat', cursive;
+    font-size: 1.5rem; letter-spacing: .5px;
+    color: var(--leather-dark);
+    text-align: center;
+    animation: breathe 2.4s ease-in-out infinite;
+    transition: opacity .4s ease;
+    pointer-events: none;
+  }
+  .open-hint.hide { opacity: 0; visibility: hidden; animation: none; }
+  @keyframes breathe { 0%,100%{opacity:.45;transform:translateY(0)} 50%{opacity:1;transform:translateY(-3px)} }
+
+  /* the dusty-rose ribbon bookmark */
+  .ribbon {
+    position: absolute;
+    top: -2px; right: 34px;
+    width: 22px; height: 92px;
+    background: linear-gradient(180deg, var(--ribbon), #b5745f);
+    box-shadow: 0 6px 8px rgba(0,0,0,.25);
+    z-index: 7;
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 82%, 0 100%);
+    transition: opacity .35s ease;
+  }
+  /* keep the ribbon only on the closed cover; hide it once the book is open */
+  .book.opened .ribbon { opacity: 0; pointer-events: none; }
+
+  /* ---------- controls ---------- */
+  .controls {
+    position: fixed;
+    left: 0; right: 0; bottom: clamp(20px, 5vh, 46px);
+    display: flex; align-items: center; justify-content: center; gap: 18px;
+    opacity: 0; transform: translateY(8px);
+    transition: opacity .4s ease, transform .4s ease;
+    pointer-events: none;
+  }
+  .controls.show { opacity: 1; transform: none; pointer-events: auto; }
+
+  /* home button, top-left — only visible while the book is open */
+  .home-btn {
+    position: fixed;
+    top: clamp(16px, 3.5vh, 34px);
+    left: clamp(16px, 3.5vw, 34px);
+    width: 46px; height: 46px;
+    display: grid; place-items: center;
+    border: 1.5px solid rgba(111,78,55,.4);
+    border-radius: 999px;
+    background: rgba(255,250,240,.7);
+    color: var(--ink);
+    cursor: pointer;
+    box-shadow: 0 3px 0 rgba(111,78,55,.18);
+    opacity: 0; transform: translateY(-6px);
+    transition: opacity .4s ease, transform .4s ease, background .2s ease;
+    pointer-events: none;
+    z-index: 30;
+  }
+  .home-btn.show { opacity: 1; transform: none; pointer-events: auto; }
+  .home-btn.show:hover  { transform: translateY(-1px); background: #fff8ec; }
+  .home-btn.show:active { transform: translateY(1px); box-shadow: 0 1px 0 rgba(111,78,55,.18); }
+  .home-btn:focus-visible { outline: 3px solid var(--ribbon); outline-offset: 3px; }
+
+  .nav-btn {
+    display: grid;
+    place-items: center;
+    width: 38px; height: 38px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 1.05rem;
+    line-height: 1;
+    color: var(--ink);
+    background: rgba(255,250,240,.7);
+    border: 1.5px solid rgba(111,78,55,.4);
+    border-radius: 999px;
+    padding: 0;
+    cursor: pointer;
+    transition: transform .15s ease, background .2s ease, box-shadow .2s ease;
+    box-shadow: 0 3px 0 rgba(111,78,55,.18);
+  }
+  .nav-btn:hover:not(:disabled) { transform: translateY(-1px); background:#fff8ec; }
+  .nav-btn:active:not(:disabled){ transform: translateY(1px); box-shadow:0 1px 0 rgba(111,78,55,.18); }
+  .nav-btn:disabled { opacity: .35; cursor: default; }
+  .nav-btn:focus-visible { outline: 3px solid var(--ribbon); outline-offset: 3px; }
+
+  .counter {
+    display: flex; align-items: baseline; justify-content: center; gap: 3px;
+    font-family: 'Caveat', cursive;
+    font-size: 1.5rem; color: var(--leather-dark);
+    min-width: 74px;
+    letter-spacing: 1px;
+  }
+  /* the editable first number — type a page and press Enter to jump there */
+  .counter-input {
+    font-family: 'Caveat', cursive;
+    font-size: 1.5rem; color: var(--leather-dark);
+    letter-spacing: 1px;
+    width: 2ch; text-align: center;
+    padding: 0 1px;
+    background: transparent;
+    border: none;
+    border-bottom: 1.5px dashed rgba(111,78,55,.45);
+    cursor: text;
+    transition: border-color .2s ease, background .2s ease;
+  }
+  .counter-input:hover  { border-bottom-color: var(--ribbon); }
+  .counter-input:focus  {
+    outline: none;
+    border-bottom-color: var(--ribbon);
+    background: rgba(255,250,240,.6);
+    border-radius: 4px 4px 0 0;
+  }
+  .counter-total { white-space: nowrap; }
+
+  /* respect people who prefer less motion */
+  @media (prefers-reduced-motion: reduce) {
+    .cover, #pageFront, .cover-hint, #pageFront .shade { transition: none !important; animation: none !important; }
+  }
+</style>
+</head>
+<body>
+
+  <div class="scene">
+    <div class="book" id="book">
+
+      <!-- the page underneath (shows the next/prev letter during a flip) -->
+      <div class="page" id="pageBack" aria-hidden="true">
+        <div class="page-inner"></div>
+      </div>
+
+      <!-- the page on top (this is the one that flips) -->
+      <div class="page" id="pageFront" role="group" aria-label="letter">
+        <div class="page-inner"></div>
+        <div class="shade"></div>
+      </div>
+
+      <!-- the leather cover -->
+      <div class="cover" id="cover" role="button" tabindex="0" aria-label="Open the book">
+        <span class="spine"></span>
+        <div class="cover-plate">
+          <div class="cover-sub">happy 22nd birthday,</div>
+          <div class="cover-name">suhani <span class="sub-heart">♡</span></div>
+        </div>
+        <div class="cover-eyebrow">22 letters from 22 people who love you!</div>
+      </div>
+
+      <span class="ribbon" aria-hidden="true"></span>
+    </div>
+  </div>
+
+  <!-- home button (top-left) — returns to the cover -->
+  <button class="home-btn" id="homeBtn" type="button" aria-label="Back to home">
+    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor"
+         stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M3 11l9-8 9 8"/><path d="M5 9.5V21h5v-6h4v6h5V9.5"/>
+    </svg>
+  </button>
+
+  <!-- tap-to-open hint, centered directly under the notebook -->
+  <div class="open-hint" id="openHint">tap to open ✦</div>
+
+  <!-- page controls -->
+  <div class="controls" id="controls">
+    <button class="nav-btn" id="prevBtn" aria-label="Back">←</button>
+    <div class="counter" id="counter">
+      <input id="pageInput" class="counter-input" type="text" inputmode="numeric"
+             maxlength="2" value="01" aria-label="Go to page number" title="Type a page number and press Enter">
+      <span class="counter-total" id="counterTotal">/ 22</span>
+    </div>
+    <button class="nav-btn" id="nextBtn" aria-label="Next letter">→</button>
+  </div>
+
+  <!-- enlarged-photo pop-up -->
+  <div class="lightbox" id="lightbox" aria-hidden="true">
+    <img class="lightbox-img" id="lightboxImg" alt="">
+    <button class="lightbox-close" id="lightboxClose" type="button" aria-label="Close larger view">✕</button>
+  </div>
+
+<script>
+/* ==================================================================
+   📸  THE PHOTOS OF THE NOTES  (one image per page)
+   ------------------------------------------------------------------
+   Just put your image files in the SAME folder as this index.html.
+   The page reads whatever images are there — no list to maintain.
+
+   ➕  TO ADD A PHOTO: drop the image file next to index.html
+       (in your GitHub repo, upload it into the repo's main folder).
+       Photos show up in filename order (2 before 10).
+
+   HOW IT FINDS THEM:
+     • On GitHub Pages it asks the GitHub API to list the repo files.
+     • Locally, serve the folder (`python3 -m http.server`) and it
+       reads the directory listing. (Double-clicking the file can't
+       read a folder, so then it uses the FALLBACK list below.)
+   ================================================================== */
+
+// If the folder can't be read (e.g. the file was double-clicked
+// instead of served), fall back to this known list so it still works.
+const FALLBACK = [
+  "22 years of suhani!!! When I think of you 1 simultaneously.jpeg",
+  "IMG_0001.jpeg", "IMG_0002.jpeg", "IMG_0003.jpeg",
+  "IMG_0004.jpeg", "IMG_0005.jpeg", "pavan.png",
+];
+
+let photos = [];   // filled in at startup from the live pics/ listing
+
+const IMG_RE = /\.(jpe?g|png|gif|webp|avif|heic|heif|bmp|tiff?)$/i;
+const natSort = (a, b) => a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' });
+
+// If we're on GitHub Pages, work out owner/repo from the URL so we can ask
+// the GitHub API what's in the repo folder.
+function githubRepoInfo(){
+  const host = location.hostname;                 // e.g. "suhani.github.io"
+  if (!host.endsWith('.github.io')) return null;
+  const owner = host.slice(0, -('.github.io'.length));
+  const seg = location.pathname.split('/').filter(Boolean);
+  const repo = seg.length ? seg[0] : `${owner}.github.io`;   // project vs. user site
+  return { owner, repo };
+}
+
+// Figure out which images sit next to index.html — reading the actual folder,
+// no manifest to maintain.
+async function loadPhotos(){
+  // A) GitHub Pages: ask the GitHub API to list the repo's files.
+  const gh = githubRepoInfo();
+  if (gh) {
+    try {
+      const res = await fetch(`https://api.github.com/repos/${gh.owner}/${gh.repo}/contents`,
+                              { headers: { Accept: 'application/vnd.github+json' } });
+      if (res.ok) {
+        const items = await res.json();
+        if (Array.isArray(items)) {
+          const names = items.filter(x => x.type === 'file' && IMG_RE.test(x.name))
+                             .map(x => x.name).sort(natSort);
+          if (names.length) return names;
+        }
+      }
+    } catch {}
+  }
+
+  // B) Local server that returns a directory listing (e.g. `python3 -m http.server`).
+  try {
+    const res = await fetch('./', { cache: 'no-store' });
+    if (res.ok) {
+      const doc = new DOMParser().parseFromString(await res.text(), 'text/html');
+      const names = [...doc.querySelectorAll('a[href]')]
+        .map(a => a.getAttribute('href') || '')
+        .map(h => decodeURIComponent(h.split('/').pop().split('?')[0]))   // filename only
+        .filter(n => IMG_RE.test(n));
+      const uniq = [...new Set(names)].sort(natSort);
+      if (uniq.length) return uniq;
+    }
+  } catch {}
+
+  return null;   // nothing worked (e.g. opened via file://) → FALLBACK list is used
+}
+
+/* ==================================================================
+   ✍️  TYPED LETTERS  (for notes that are text, not a photo)
+   ------------------------------------------------------------------
+   Key each letter by its PAGE NUMBER (1–22). Photos automatically
+   fill every OTHER page, flowing around these pinned pages.
+   Put the whole message (including any sign-off) in "text".
+   ================================================================== */
+const textLetters = {
+  8: {
+    from: "",   // leave blank — the sign-off is already inside the text
+    text:
+`Dear Suhani,
+
+Happy 22!! I hope you're out getting drunk, singing and taking lots of pictures. I miss u loads, but I'm so excited for the next year! Starting a job and moving cities is crazy but I know ur going to enjoy it so much. Can't wait to celebrate with u soon!!
+
+Lots of love,
+Jhallak`
+  },
+};
+
+/* ================================================================== */
+
+
+// ----------------- the machinery (no need to edit) -----------------
+const FLIP_MS = 820;
+const TARGET_PAGES = 22;          // always fill the book to 22 pages
+let total = 0;
+let current = 0;
+let busy = false;
+
+const book     = document.getElementById('book');
+const cover    = document.getElementById('cover');
+const front    = document.getElementById('pageFront');
+const back     = document.getElementById('pageBack');
+const frontIn  = front.querySelector('.page-inner');
+const backIn   = back.querySelector('.page-inner');
+const controls = document.getElementById('controls');
+const counter  = document.getElementById('counter');
+const prevBtn  = document.getElementById('prevBtn');
+const nextBtn  = document.getElementById('nextBtn');
+const openHint = document.getElementById('openHint');
+const homeBtn  = document.getElementById('homeBtn');
+const pageInput    = document.getElementById('pageInput');
+const counterTotal = document.getElementById('counterTotal');
+const lightbox      = document.getElementById('lightbox');
+const lightboxImg   = document.getElementById('lightboxImg');
+const lightboxClose = document.getElementById('lightboxClose');
+
+const pad = n => String(n + 1).padStart(2, '0');
+
+// build a safe src for a filename that may contain spaces / punctuation.
+// images live in the SAME folder as this index.html.
+const photoSrc = name => encodeURIComponent(name);
+
+// keep every photo warm in the browser cache so re-rendering a page paints
+// instantly (no reload "blink"). The kept references stop them being dropped.
+const _preloaded = [];
+function preloadPhotos(){
+  photos.forEach(name => { const im = new Image(); im.decoding = 'sync'; im.src = photoSrc(name); _preloaded.push(im); });
+}
+
+// escape user text before putting it into innerHTML
+function esc(s){ const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+
+// Combine the typed letters + the folder photos into one ordered list of pages.
+// Typed letters stay pinned to their page number; photos flow around them.
+let pages = [];
+function buildPages(){
+  pages = [];
+  const queue = [...photos];              // photos fill every non-letter slot, in order
+  for (let n = 1; n <= total; n++){
+    if (textLetters[n]) {
+      pages.push({ type: 'text', text: textLetters[n].text, from: textLetters[n].from || '' });
+    } else if (queue.length) {
+      pages.push({ type: 'photo', name: queue.shift() });
+    } else {
+      pages.push({ type: 'placeholder' });
+    }
+  }
+}
+
+function pageHTML(i){
+  const page = pages[i] || { type: 'placeholder' };
+  const head = `<div class="page-no">no. ${pad(i)}</div>`;
+
+  if (page.type === 'text') {
+    const from = page.from && page.from.trim()
+      ? `<div class="msg-from">— ${esc(page.from)}</div>` : '';
+    return `${head}
+      <div class="msg">${esc(page.text)}${from}</div>`;
+  }
+  if (page.type === 'photo') {
+    return `${head}
+      <div class="photo-slot">
+        <img class="page-photo" src="${photoSrc(page.name)}" alt="note ${pad(i)}" decoding="sync">
+      </div>`;
+  }
+  // placeholder
+  return `${head}
+    <div class="coming-soon">coming suhn, suhano <span class="sub-heart">♡</span></div>`;
+}
+
+function updateControls(idx = current){
+  // don't clobber what the user is currently typing in the page box
+  if (document.activeElement !== pageInput) pageInput.value = pad(idx);
+  counterTotal.textContent = `/ ${total}`;
+  // on the first letter the back arrow returns to the cover, so it stays enabled
+  prevBtn.disabled = false;
+  prevBtn.setAttribute('aria-label', idx === 0 ? 'Back to cover' : 'Previous letter');
+  nextBtn.disabled = idx === total - 1;
+}
+
+// jump straight to a page number (1-based), like an e-book's "go to page"
+function goToPage(n){
+  if (busy || !book.classList.contains('opened')) return;
+  if (!Number.isFinite(n)) return;
+  current = Math.min(Math.max(1, Math.round(n)), total) - 1;   // clamp into range
+  render();
+}
+
+function render(){
+  frontIn.innerHTML = pageHTML(current);
+  backIn.innerHTML  = pageHTML(current + 1 < total ? current + 1 : current);
+  updateControls();
+}
+
+function openBook(){
+  book.classList.add('opened');
+  cover.classList.add('open');
+  cover.setAttribute('aria-hidden', 'true');
+  cover.tabIndex = -1;
+  openHint.classList.add('hide');
+  setTimeout(() => {
+    controls.classList.add('show');
+    homeBtn.classList.add('show');
+  }, 500);
+}
+
+function closeBook(){
+  if (busy) return;
+  homeBtn.classList.remove('show');
+  controls.classList.remove('show');     // arrows + counter fade out first
+  cover.classList.remove('open');        // cover flips back over the pages (~1.15s)
+  cover.removeAttribute('aria-hidden');
+  cover.tabIndex = 0;
+  // NOTE: we deliberately do NOT reset to page 1 yet — the current page stays
+  // visible under the cover as it swings shut, so there's no jump to page 1.
+  const stillClosing = () => !cover.classList.contains('open');   // guard against a quick re-open
+  // "tap to open" sits below the book (no page overlap), so it can return
+  // as soon as the controls have faded
+  setTimeout(() => { if (stillClosing()) openHint.classList.remove('hide'); }, 450);
+  // the ribbon lives on the cover — only bring it back once the cover has
+  // finished closing, so it never flashes over the pages
+  setTimeout(() => { if (stillClosing()) book.classList.remove('opened'); }, 650);
+  // reset to page 1 only after the cover has fully closed over the pages
+  setTimeout(() => { if (stillClosing()) { current = 0; render(); } }, 1200);
+}
+
+function goNext(){
+  if (busy || current >= total - 1) return;
+  busy = true;
+  updateControls(current + 1);                     // counter reacts instantly, before the flip
+  backIn.innerHTML = pageHTML(current + 1);        // reveal next underneath
+  book.classList.add('flipping');
+  front.style.transition = `transform ${FLIP_MS}ms cubic-bezier(.62,.02,.2,1)`;
+  front.style.transform  = 'rotateY(-180deg)';
+  setTimeout(() => {
+    current++;
+    front.style.transition = 'none';
+    front.style.transform  = 'rotateY(0deg)';
+    book.classList.remove('flipping');
+    front.offsetHeight;                             // force reflow
+    render();
+    busy = false;
+  }, FLIP_MS);
+}
+
+function goPrev(){
+  if (busy) return;
+  if (current <= 0) { closeBook(); return; }   // back on page 1 → return to the cover
+  busy = true;
+  updateControls(current - 1);                      // counter reacts instantly, before the flip
+  backIn.innerHTML  = pageHTML(current);            // current stays beneath
+  frontIn.innerHTML = pageHTML(current - 1);        // previous flips in
+  front.style.transition = 'none';
+  front.style.transform  = 'rotateY(-180deg)';
+  front.offsetHeight;                               // force reflow
+  book.classList.add('flipping');
+  requestAnimationFrame(() => {
+    front.style.transition = `transform ${FLIP_MS}ms cubic-bezier(.62,.02,.2,1)`;
+    front.style.transform  = 'rotateY(0deg)';
+  });
+  setTimeout(() => {
+    current--;
+    book.classList.remove('flipping');
+    render();
+    busy = false;
+  }, FLIP_MS);
+}
+
+// ----- the enlarged-photo pop-up -----
+function openLightbox(i){
+  const page = pages[i];
+  if (!page || page.type !== 'photo') return;
+  lightboxImg.src = photoSrc(page.name);
+  lightboxImg.alt = 'note ' + pad(i);
+  lightbox.classList.add('show');
+  lightbox.setAttribute('aria-hidden', 'false');
+}
+function closeLightbox(){
+  lightbox.classList.remove('show');
+  lightbox.setAttribute('aria-hidden', 'true');
+}
+const lightboxOpen = () => lightbox.classList.contains('show');
+
+// events
+cover.addEventListener('click', openBook);
+cover.addEventListener('keydown', e => {
+  if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openBook(); }
+});
+nextBtn.addEventListener('click', goNext);
+prevBtn.addEventListener('click', goPrev);
+homeBtn.addEventListener('click', closeBook);
+
+// editable page number — type a page and jump straight to it
+function commitPageInput(){
+  const n = parseInt(pageInput.value, 10);
+  if (!isNaN(n)) goToPage(n);
+  pageInput.value = pad(current);        // normalize (e.g. "5" → "05", clamp out-of-range)
+}
+pageInput.addEventListener('focus', () => pageInput.select());
+pageInput.addEventListener('input', () => { pageInput.value = pageInput.value.replace(/\D/g, '').slice(0, 2); });
+pageInput.addEventListener('keydown', e => {
+  e.stopPropagation();                   // don't let page-flip arrows fire while typing
+  if (e.key === 'Enter')  { e.preventDefault(); commitPageInput(); pageInput.blur(); }
+  else if (e.key === 'Escape') { e.preventDefault(); pageInput.value = pad(current); pageInput.blur(); }
+});
+pageInput.addEventListener('blur', commitPageInput);
+
+// clicking the photo opens the larger view
+front.addEventListener('click', e => {
+  if (busy || !book.classList.contains('opened')) return;
+  if (e.target.closest('.page-photo')) openLightbox(current);
+});
+lightboxClose.addEventListener('click', closeLightbox);
+lightbox.addEventListener('click', e => { if (e.target === lightbox) closeLightbox(); });
+
+document.addEventListener('keydown', e => {
+  if (document.activeElement === pageInput) return;   // typing a page number
+  if (lightboxOpen()) {                       // pop-up takes priority
+    if (e.key === 'Escape') closeLightbox();
+    return;
+  }
+  if (cover.classList.contains('open')) {
+    if (e.key === 'ArrowRight') goNext();
+    if (e.key === 'ArrowLeft')  goPrev();
+  }
+});
+
+// load the folder, then draw the first page
+(async function init(){
+  photos = (await loadPhotos()) || FALLBACK;
+  // make sure every photo and every typed letter has a page
+  total  = Math.max(TARGET_PAGES, photos.length + Object.keys(textLetters).length);
+  preloadPhotos();
+  buildPages();
+  current = 0;
+  render();
+})();
+</script>
+</body>
+</html>
